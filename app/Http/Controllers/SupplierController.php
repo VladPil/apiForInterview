@@ -8,8 +8,11 @@ use App\Http\Resources\Supplier\SupplierCollection;
 use App\Http\Resources\Supplier\SupplierResource;
 use Illuminate\Http\Request;
 use App\Http\Requests\SupplierRequest;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
+
+use function PHPSTORM_META\type;
 
 class SupplierController extends Controller
 {
@@ -89,7 +92,13 @@ class SupplierController extends Controller
                 ->where('suppliers.id', '=', $supplier['id'])
                 ->groupBy('products.supplier_id')
                 ->get();
-        $supplier['total_products'] = $dataOnRequestTotalProducts[0]->total_products;
+
+        try{
+            $supplier['total_products'] = $dataOnRequestTotalProducts[0]->total_products;
+        } catch( Exception $e) {
+            $supplier['total_products'] = 0;
+        }
+
         return new SupplierResource($supplier);
     }
 
