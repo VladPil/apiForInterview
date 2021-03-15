@@ -8,6 +8,7 @@ use App\Http\Resources\Product\ProductCollection;
 use App\Http\Resources\Product\ProductResource;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProductRequest;
+use Exception;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
@@ -93,7 +94,12 @@ class ProductController extends Controller
                 ->select(DB::raw('suppliers.name_supplier'))
                 ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
                 ->get();
-        $product['name_supplier'] = $nameSupplier[0]->name_supplier;
+        
+        try{
+            $product['name_supplier'] = $nameSupplier[0]->name_supplier;
+        } catch( Exception $e) {
+            return response('', $this->responceToBadRequest);
+        }
         return new ProductResource($product);
     }
 
