@@ -88,13 +88,13 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        // $nameSupplier = DB::table('products')
-        //         ->where('products.id', '=', $product['id'])
-        //         ->select(DB::raw('suppliers.name_supplier'))
-        //         ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
-        //         ->get();
-        // $product['nameSupplier'] = $nameSupplier[0]->name_supplier;
-        // return new ProductResource($product);
+        $nameSupplier = DB::table('products')
+                ->where('products.id', '=', $product['id'])
+                ->select(DB::raw('suppliers.name_supplier'))
+                ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
+                ->get();
+        $product['name_supplier'] = $nameSupplier[0]->name_supplier;
+        return new ProductResource($product);
     }
 
 
